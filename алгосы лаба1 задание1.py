@@ -3,7 +3,7 @@
 import numpy as np
 import random
 
-vec = np.random.randint(0, (10**5)*3, (10**5)*3)  # создали огромный вектор со случ значениями
+vec = np.random.randint(0, (10**5)*17, (10**5)*17)  # создали огромный вектор со случ значениями
 #vec = np.random.randint(1, 11, 10)  # нижний диапазон вкл, верх диапазон не вкл, длина
 print(vec, end='\n\n')
 
@@ -36,7 +36,7 @@ def mid_harmonic(vector):
         sum_vk += 1/vector[i]
     return sum_vk
 
-for n in range(1, (10**5)*3, 300):
+for n in range(1, (10**5)*17, 1700):
 #for n in range(1, 11, 2):
     v = vec[0:n]  # создаем мини-векторы для каждого случая
     print(sum_of_nums(v), search_of_max(v), search_of_min(v), n/mid_harmonic(v))
