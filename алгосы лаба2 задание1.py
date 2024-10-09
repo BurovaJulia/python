@@ -64,13 +64,10 @@ def build_graph(time, range_):
     plt.show()
     plt.grid(True)
 
-def time_measurement():
-    exe_time_sorted_s = []  # список времени выполнения
-    exe_time_random_s = []
-    exe_time_resorted_s = []
-    exe_time_sorted_p = []
-    exe_time_random_p = []
-    exe_time_resorted_p = []
+def time_measurement(func):
+    exe_time_sorted = []  # список времени выполнения
+    exe_time_random = []
+    exe_time_resorted = []
     n_values = [n1, n2, n3, n4]  # список значений при которых выполняются измерения
 
     for i in n_values:
@@ -79,41 +76,24 @@ def time_measurement():
         test_list_resorted = list_n_resorted[:i]
 
         start_time = time.time()
-        shell(test_list_sorted)
+        func(test_list_sorted)
         end_time = time.time()
-        exe_time_sorted_s.append(end_time - start_time)
+        exe_time_sorted.append(end_time - start_time)
 
         start_time = time.time()
-        shell(test_list_random)
+        func(test_list_random)
         end_time = time.time()
-        exe_time_random_s.append(end_time - start_time)
+        exe_time_random.append(end_time - start_time)
 
         start_time = time.time()
-        shell(test_list_resorted)
+        func(test_list_resorted)
         end_time = time.time()
-        exe_time_resorted_s.append(end_time - start_time)
+        exe_time_resorted.append(end_time - start_time)
 
-        start_time = time.time()
-        pancake(test_list_sorted)
-        end_time = time.time()
-        exe_time_sorted_p.append(end_time - start_time)
-
-        start_time = time.time()
-        pancake(test_list_random)
-        end_time = time.time()
-        exe_time_random_p.append(end_time - start_time)
-
-        start_time = time.time()
-        shell(test_list_resorted)
-        end_time = time.time()
-        exe_time_resorted_p.append(end_time - start_time)
+    build_graph(exe_time_sorted, n_values)
+    build_graph(exe_time_random, n_values)
+    build_graph(exe_time_resorted, n_values)
 
 
-    build_graph(exe_time_sorted_s, n_values)
-    build_graph(exe_time_random_s, n_values)
-    build_graph(exe_time_resorted_s, n_values)
-    build_graph(exe_time_sorted_p, n_values)
-    build_graph(exe_time_random_p, n_values)
-    build_graph(exe_time_resorted_p, n_values)
-
-time_measurement()
+time_measurement(shell)
+time_measurement(pancake)
