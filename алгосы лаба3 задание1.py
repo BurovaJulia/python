@@ -1,3 +1,4 @@
+#Лаба 3 (реализация 1 версии списка)
 class Node:
     """Узел списка
 
@@ -35,9 +36,9 @@ class Node:
 
     """
 
-    def __init__(self, data:int=None, next:'Node'=None):
+    def __init__(self, data):
         self.data = data
-        self.next = next
+        self.next = None
 
     def __repr__(self):
          return f'{self.__class__.__name__}(data={self.data}, next={self.next})'
@@ -87,7 +88,9 @@ class SingleLinkedList_v1:
 
     def insert_first_node(self, value:int) -> None:
         '''Добавить элемент в начало списка'''
-        self._head = Node(value, self._head)
+        new_node = Node(value)
+        new_node.next = self._head
+        self._head = new_node
 
     def remove_first_node(self) -> int:
         '''Удалить первый элемент списка'''
@@ -127,3 +130,22 @@ class SingleLinkedList_v1:
             l.append(str(node.data))
             node = node.next
         return 'LinkedList.head -> ' + ' -> '.join(l) + ' -> None'
+
+    #Реализация второй версии списка
+    
+    def get_size(self) -> int:
+        count = 0
+        current_node = self._head
+        while current_node:
+            count += 1
+            current_node = current_node.next
+        return count
+
+    def find_node(self, value) -> int:
+        
+
+    def replace_node(ValueType old_value, ValueType new_value) -> None:
+        return 0
+
+    def remove_node(ValueType value) -> ValueType:
+        return 0
