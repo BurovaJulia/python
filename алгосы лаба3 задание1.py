@@ -1,112 +1,57 @@
-#Лаба 3 (реализация 1 версии списка)
+# Лаба 3 (реализация 1 версии списка)
 class Node:
-    """Узел списка
+    """Узел списка"""
 
-    >>> Node()
-    Node(data=None, next=None)
+    def print_list(node):
+        while node:
+            print(node)
+            node = node.next
 
-    >>> node3 = Node(3)
-    >>> node3
-    Node(data=3, next=None)
 
-    >>> node2 = Node(data=2, next=node3)
-    >>> node2
-    Node(data=2, next=Node(data=3, next=None))
-
-    >>> node1 = Node(None, None)
-    >>> node1
-    Node(data=None, next=None)
-
-    >>> node1.data = 1
-    >>> node1
-    Node(data=1, next=None)
-    >>> node1.next = node2
-    >>> node1
-    Node(data=1, next=Node(data=2, next=Node(data=3, next=None)))
-
-    >>> def print_list(node):
-    ...   while node:
-    ...       print(node)
-    ...       node = node.next
-    ...
-    >>> print_list(node1)
-    Node(data=1, next=Node(data=2, next=Node(data=3, next=None)))
-    Node(data=2, next=Node(data=3, next=None))
-    Node(data=3, next=None)
-
-    """
 
     def __init__(self, data):
         self.data = data
         self.next = None
 
     def __repr__(self):
-         return f'{self.__class__.__name__}(data={self.data}, next={self.next})'
+        return f'{self.__class__.__name__}(data={self.data}, next={self.next})'
 
-    
 
 class SingleLinkedList_v1:
-    '''Реализация АТД Односвязный линейный список  (SingleLinkedList_v1)
-
-    >>> SingleLinkedList_v1()
-    SingleLinkedList_v1(None)
-
-    >>> list1 = SingleLinkedList_v1()
-    >>> list1
-    SingleLinkedList_v1(None)
-
-    >>> list1.insert_first_node(2)
-    >>> list1
-    SingleLinkedList_v1(Node(data=2, next=None))
-
-    >>> list1.insert_first_node(1)
-    >>> list1
-    SingleLinkedList_v1(Node(data=1, next=Node(data=2, next=None)))
-
-    >>> list1.insert_first_node(0)
-    >>> print(list1)
-    LinkedList.head -> 0 -> 1 -> 2 -> None
-
-    >>> list1.insert_last_node(3)
-    >>> print(list1)
-    LinkedList.head -> 0 -> 1 -> 2 -> 3 -> None
-
-    >>> list1.remove_first_node()
-    0
-    >>> print(list1)
-    LinkedList.head -> 1 -> 2 -> 3 -> None
-
-    >>> list1.remove_last_node()
-    3
-    >>> print(list1)
-    LinkedList.head -> 1 -> 2 -> None
-    '''
+    '''Реализация АТД Односвязный линейный список  (SingleLinkedList_v1)'''
 
     def __init__(self) -> None:
         '''Возвращает пустой список'''
         self._head = None
+        self.size = 0
+        self._tail = None
 
-    def insert_first_node(self, value:int) -> None:
+    def insert_first_node(self, value: int) -> None:
         '''Добавить элемент в начало списка'''
         new_node = Node(value)
         new_node.next = self._head
         self._head = new_node
+        if self._tail is None:
+            self._tail = new_node
+        self.size += 1
 
     def remove_first_node(self) -> int:
         '''Удалить первый элемент списка'''
         temp = self._head.data
         self._head = self._head.next
+        self.size -= 1
         return temp
 
-    def insert_last_node(self, value:int) -> None:
+    def insert_last_node(self, value: int) -> None:
         '''Добавить элемент в конец списка'''
-        if self._head is None:
-            self.insert_first_node(value)
+        new_node = Node(value)
+        if self._tail is None:
+            self._tail = new_node
+            self._head = new_node
         else:
-            current_node = self._head
-            while current_node.next is not None:
-                current_node = current_node.next
-            current_node.next = Node(value)
+            self._tail.next = new_node
+            self._tail = new_node
+        self.size += 1
 
     def remove_last_node(self) -> int:
         '''Удалить последний элемент списка'''
@@ -118,6 +63,7 @@ class SingleLinkedList_v1:
                 current_node = current_node.next
             temp = current_node.next.data
             current_node.next = None
+            self.size -= 1
             return temp
 
     def __repr__(self) -> str:
@@ -131,21 +77,183 @@ class SingleLinkedList_v1:
             node = node.next
         return 'LinkedList.head -> ' + ' -> '.join(l) + ' -> None'
 
-    #Реализация второй версии списка
-    
+    # Реализация второй версии списка
+
     def get_size(self) -> int:
-        count = 0
-        current_node = self._head
-        while current_node:
-            count += 1
-            current_node = current_node.next
-        return count
+        return self.size
 
     def find_node(self, value) -> int:
-        
+        current_node = self._head
+        while current_node:
+            if current_node.data == value:
+                return current_node.data
+            current_node = current_node.next
 
-    def replace_node(ValueType old_value, ValueType new_value) -> None:
-        return 0
+    def replace_node(self, old_value, new_value) -> None:
+        current_node = self._head
+        while current_node:
+            if current_node.data == old_value:
+                current_node.data = new_value
+                return
+            current_node = current_node.next
 
-    def remove_node(ValueType value) -> ValueType:
-        return 0
+
+    def remove_node(self, value) -> None:
+        if self._head is None:
+            return
+        if self._head.data == value:
+            self._head = self._head.next
+            if self._head is None:
+                self._tail = None
+            self.size -= 1
+            return
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.data == value:
+                current_node.next = current_node.next.next
+                if current_node.next is None:
+                    self._tail = current_node
+                self.size -= 1
+                return
+            current_node = current_node.next
+
+    def find_previos_node(self, value):
+        if self._head is None:
+            return
+        if self._head.data == value:
+            return
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.next.data == value:
+                return current_node.data
+            current_node = current_node.next
+        return
+
+    def find_next_node(self, value) -> int:
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.data == value:
+                return current_node.next.data
+            current_node = current_node.next
+        return
+
+    def insert_before_node(self, value) -> None:
+        if self._head is None:
+            return
+        if self._head.data == value:
+            new_node = Node(value)
+            new_node.next = self._head
+            self._head = new_node
+            self.size += 1
+            return
+
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.next.data == value:
+                new_node = Node(value)
+                new_node.next = current_node.next
+                current_node.next = new_node
+                self.size += 1
+                return
+            current_node = current_node.next
+
+
+    def insert_after_node(self, value) -> None:
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.data == value:
+                new_node = Node(value)
+                new_node.next = current_node.next
+                current_node.next = new_node
+                if current_node == self._tail:
+                    self._tail = new_node
+                self.size += 1
+                return
+            current_node = current_node.next
+
+    def replace_previos_node(self, old_value, new_value) -> None:
+        if self._head is None:
+            return
+        if self._head.data == old_value:
+            return
+
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.next.data == old_value:
+                current_node.data = new_value
+                return
+            current_node = current_node.next
+
+    def replace_next_node(self, old_value, new_value) -> None:
+        current_node = self._head
+        while current_node is not None:
+            if current_node.data == old_value:
+                current_node.next.data = new_value
+                return
+            current_node = current_node.next
+
+    def remove_previos_node(self, value) -> None:
+        if self._head is None:
+            return
+        if self._head.data == value:
+            return
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.next.data == value:
+                if current_node == self._head:
+                    self._head = current_node.next
+                else:
+                    current_node.next = current_node.next.next
+                if current_node.next is None:
+                    self._tail = current_node
+                self.size -= 1
+                return
+            current_node = current_node.next
+
+    def remove_next_node(self, value) -> int:
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.data == value:
+                current_node.next = current_node.next.next
+                self.size -= 1
+                return
+            current_node = current_node.next
+
+    def reverse_list(self):
+        prev = None
+        current_node = self._head
+        while current_node:
+            next_node = current_node.next
+            current_node.next = prev
+            prev = current_node
+            current_node = next_node
+        self._head = prev
+        if self.size > 0:
+            self._tail = current_node
+
+    def bubble_sort_list(self):
+        if self._head is None or self._head.next is None:
+            return
+        sorted = False
+        while not sorted:
+            sorted = True
+            current_node = self._head
+            while current_node.next is not None:
+                if current_node.data > current_node.next.data:
+                    sorted = False
+                    current_node.data, current_node.next.data = current_node.next.data, current_node.data
+                current_node = current_node.next
+
+    def list_of_unique(self, value):
+        if self._head is None:
+            self.insert_last_node(value)
+            self.size += 1
+            return
+
+        current_node = self._head
+        while current_node.next is not None:
+            if current_node.data == value:
+                return
+            current_node = current_node.next
+        self.insert_last_node(value)
+        self.size += 1
